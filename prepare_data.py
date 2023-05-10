@@ -1,0 +1,46 @@
+import mgr.data.readrawdata as rd
+import mgr.calc.signal as sig
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.dummy import DummyClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+import datetime
+import csv
+
+STANDING_COLOR = 'gray'
+WALKING_COLOR = 'green'
+DOWNSTAIRS_COLOR = 'brown'
+UPSTAIRS_COLOR = 'blue'
+RUNNING_COLOR = 'red'
+
+#PERSON_1 - prepare data - start
+STANDING_PERSON_1 = rd.read('mgr/data/resources/person_1/standing.csv')
+STANDING_PERSON_1['magnitude'] = sig.magnitude(STANDING_PERSON_1)
+
+WALKING_PERSON_1 = rd.read('mgr/data/resources/person_1/walking.csv')
+WALKING_PERSON_1['magnitude'] = sig.magnitude(WALKING_PERSON_1)
+
+DOWNSTAIRS_PERSON_1 = rd.read('mgr/data/resources/person_1/downstairs.csv')
+DOWNSTAIRS_PERSON_1['magnitude'] = sig.magnitude(DOWNSTAIRS_PERSON_1)
+
+UPSTAIRS_PERSON_1 = rd.read('mgr/data/resources/person_1/upstairs.csv')
+UPSTAIRS_PERSON_1['magnitude'] = sig.magnitude(UPSTAIRS_PERSON_1)
+
+RUNNING_PERSON_1 = rd.read('mgr/data/resources/person_1/running.csv')
+RUNNING_PERSON_1['magnitude'] = sig.magnitude(RUNNING_PERSON_1)
+
+activities_person_1 = [STANDING_PERSON_1, WALKING_PERSON_1, DOWNSTAIRS_PERSON_1, UPSTAIRS_PERSON_1, RUNNING_PERSON_1]
+features_file_person_1 = 'mgr/data/features/person_1/Features.csv'
+
+with open(features_file_person_1, 'w') as features_file:
+    rows = csv.writer(features_file)
+    for i in range(0, len(activities_person_1)):
+        for f in sig.extract_features(activities_person_1[i]):
+            rows.writerow([i] + f)
+
+#PERSON_1 - prepare data - stop
